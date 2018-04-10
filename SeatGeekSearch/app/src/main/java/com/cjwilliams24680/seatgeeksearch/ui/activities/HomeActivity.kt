@@ -1,7 +1,8 @@
-package com.cjwilliams24680.seatgeeksearch
+package com.cjwilliams24680.seatgeeksearch.ui.activities
 
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import com.cjwilliams24680.seatgeeksearch.R
 
 class HomeActivity : AppCompatActivity() {
 
