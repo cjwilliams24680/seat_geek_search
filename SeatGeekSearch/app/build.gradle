@@ -36,8 +36,44 @@ dependencies {
     implementation "com.android.support:appcompat-v7:$support_library_version"
     implementation 'com.android.support.constraint:constraint-layout:1.0.2'
 
-    implementation 'com.squareup.retrofit2:retrofit:2.3.0'
-    implementation 'com.squareup.retrofit2:converter-scalars:2.3.0'
+    ext {
+        okHttpVersion = '3.9.0'
+        glideVersion = '4.0.0'
+        stagVersion = '2.3.3'
+        retrofitVersion = '2.3.0'
+        daggerVersion = '2.14.1'
+    }
+
+    // Glide
+    implementation "com.github.bumptech.glide:glide:$glideVersion"
+    implementation "com.github.bumptech.glide:annotations:$glideVersion"
+    annotationProcessor "com.github.bumptech.glide:compiler:$glideVersion"
+
+    // networking libraries
+    implementation "com.squareup.okhttp3:okhttp:${okHttpVersion}"
+    implementation "com.squareup.okhttp3:logging-interceptor:${okHttpVersion}"
+
+    // dependency injection
+    implementation "com.google.dagger:dagger:${daggerVersion}"
+    annotationProcessor "com.google.dagger:dagger-compiler:${daggerVersion}"
+
+    // reactive java
+    implementation 'io.reactivex.rxjava2:rxandroid:2.0.1'
+    implementation 'io.reactivex.rxjava2:rxjava:2.1.9'
+
+    // date library
+    implementation 'com.jakewharton.threetenabp:threetenabp:1.0.5'
+
+    // JSON parser
+    implementation "com.vimeo.stag:stag-library:$stagVersion"
+    annotationProcessor "com.vimeo.stag:stag-library-compiler:$stagVersion"
+
+    // Retrofit
+    implementation "com.squareup.retrofit2:retrofit:${retrofitVersion}"
+    implementation "com.squareup.retrofit2:converter-gson:${retrofitVersion}"
+    implementation "com.squareup.retrofit2:adapter-rxjava2:${retrofitVersion}"
+
+    // Databinding for Kotlin
     kapt "com.android.databinding:compiler:$gradle_tools_version"
 
     testImplementation 'junit:junit:4.12'
