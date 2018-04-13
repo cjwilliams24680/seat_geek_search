@@ -4,6 +4,8 @@ apply plugin: 'kotlin-android'
 
 apply plugin: 'kotlin-android-extensions'
 
+apply plugin: 'kotlin-kapt'
+
 android {
     compileSdkVersion 26
 
@@ -47,7 +49,7 @@ dependencies {
     // Glide
     implementation "com.github.bumptech.glide:glide:$glideVersion"
     implementation "com.github.bumptech.glide:annotations:$glideVersion"
-    annotationProcessor "com.github.bumptech.glide:compiler:$glideVersion"
+    kapt "com.github.bumptech.glide:compiler:$glideVersion"
 
     // networking libraries
     implementation "com.squareup.okhttp3:okhttp:${okHttpVersion}"
@@ -55,7 +57,7 @@ dependencies {
 
     // dependency injection
     implementation "com.google.dagger:dagger:${daggerVersion}"
-    annotationProcessor "com.google.dagger:dagger-compiler:${daggerVersion}"
+    kapt "com.google.dagger:dagger-compiler:${daggerVersion}"
 
     // reactive java
     implementation 'io.reactivex.rxjava2:rxandroid:2.0.1'
@@ -63,10 +65,6 @@ dependencies {
 
     // date library
     implementation 'com.jakewharton.threetenabp:threetenabp:1.0.5'
-
-    // JSON parser
-    implementation "com.vimeo.stag:stag-library:$stagVersion"
-    annotationProcessor "com.vimeo.stag:stag-library-compiler:$stagVersion"
 
     // Retrofit
     implementation "com.squareup.retrofit2:retrofit:${retrofitVersion}"

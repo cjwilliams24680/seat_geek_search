@@ -4,7 +4,6 @@ import android.support.annotation.NonNull;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
-import com.vimeo.stag.UseStag;
 
 import java.util.List;
 
@@ -12,7 +11,6 @@ import java.util.List;
  * Created by chris on 4/11/18.
  */
 
-@UseStag
 public class EventSearchResponse {
 
     @Expose

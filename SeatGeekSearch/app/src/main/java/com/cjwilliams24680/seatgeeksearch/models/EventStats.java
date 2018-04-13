@@ -2,13 +2,11 @@ package com.cjwilliams24680.seatgeeksearch.models;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
-import com.vimeo.stag.UseStag;
 
 /**
  * Created by chris on 4/11/18.
  */
 
-@UseStag
 public class EventStats {
 
     @Expose
