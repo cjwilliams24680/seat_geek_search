@@ -2,9 +2,13 @@ package com.cjwilliams24680.seatgeeksearch.dagger;
 
 import android.app.Application;
 
+import com.cjwilliams24680.seatgeeksearch.network.NetworkManager;
+import com.cjwilliams24680.seatgeeksearch.network.SeatGeekApi;
+
 import java.lang.ref.WeakReference;
 
 import dagger.Module;
+import dagger.Provides;
 
 /**
  * Created by chris on 4/12/18.
@@ -19,6 +23,11 @@ public class ApplicationModule {
 
     public ApplicationModule(Application application) {
         this.application = new WeakReference<>(application);
+    }
+
+    @Provides
+    SeatGeekApi providesSeatGeekApi(NetworkManager networkManager) {
+        return networkManager.getSeatGeekApi();
     }
 
 }
