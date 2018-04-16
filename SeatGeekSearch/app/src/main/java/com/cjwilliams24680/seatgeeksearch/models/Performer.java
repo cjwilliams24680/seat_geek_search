@@ -3,8 +3,6 @@ package com.cjwilliams24680.seatgeeksearch.models;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-import java.util.List;
-
 /**
  * Created by chris on 4/11/18.
  *
@@ -18,8 +16,8 @@ public class Performer {
     boolean isPrimary;
 
     @Expose
-    @SerializedName("genres")
-    List<Genre> genres;
+    @SerializedName("images")
+    Images images;
 
     public Performer() { }
 
@@ -27,8 +25,7 @@ public class Performer {
         return isPrimary;
     }
 
-    public List<Genre> getGenres() {
-        return genres;
+    public Images getImages() {
+        return images;
     }
-
 }
