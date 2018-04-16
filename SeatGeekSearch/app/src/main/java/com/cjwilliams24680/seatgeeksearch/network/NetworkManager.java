@@ -83,6 +83,8 @@ public class NetworkManager {
                     })
                     .build();
         }
+
+        return client;
     }
 
     private Request attachHeaders(Request original) {
