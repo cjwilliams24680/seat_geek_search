@@ -78,10 +78,11 @@ class SearchFragment : BaseFragment(), ListItemCallback<Event> , android.support
     private fun searchEvents(searchQuery: String) {
         disposables.add(
                 seatGeekApi!!.searchEvents(searchQuery, 20)
+                        .flatMapSingle { eventsResponse -> eventsResponse.visibleEvents }
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(
-                                {eventsResponse ->
-                                    adapter.events = eventsResponse.events
+                                {events ->
+                                    adapter.events = events
                                     showLoadingSpinner(false)
                                 },
                                 {error ->
@@ -91,7 +92,12 @@ class SearchFragment : BaseFragment(), ListItemCallback<Event> , android.support
     }
 
     private fun showLoadingSpinner(isVisible: Boolean) {
-        TODO("Havent added a progress spinner to the layout yet")
+        if (isVisible) {
+            binding!!.progressSpinner.visibility = View.VISIBLE
+            binding!!.progressSpinner.animate()
+        } else {
+            binding!!.progressSpinner.visibility = View.GONE
+        }
     }
 
     override fun onItemSelected(item: Event) {

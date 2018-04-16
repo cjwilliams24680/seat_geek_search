@@ -60,7 +60,6 @@ public class Event {
     @Expose
     @SerializedName("datetime_utc")
     @JsonAdapter(UtcDateTimeAdapter.class)
-    @NonNull
     ZonedDateTime dateTimeUtc;
 
     @Expose
@@ -129,7 +128,6 @@ public class Event {
         return visibleUntilUtc;
     }
 
-    @NonNull
     public ZonedDateTime getDateTimeUtc() {
         return dateTimeUtc;
     }
@@ -157,5 +155,9 @@ public class Event {
     @NonNull
     public String getType() {
         return type;
+    }
+
+    public boolean isVisible() {
+        return ZonedDateTime.now().isBefore(visibleUntilUtc);
     }
 }

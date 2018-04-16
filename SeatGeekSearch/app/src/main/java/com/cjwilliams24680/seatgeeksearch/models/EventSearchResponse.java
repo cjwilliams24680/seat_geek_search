@@ -7,6 +7,10 @@ import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
+import io.reactivex.Flowable;
+import io.reactivex.Single;
+import io.reactivex.schedulers.Schedulers;
+
 /**
  * Created by chris on 4/11/18.
  */
@@ -33,6 +37,13 @@ public class EventSearchResponse {
     @NonNull
     public List<Event> getEvents() {
         return events;
+    }
+
+    public Single<List<Event>> getVisibleEvents() {
+        return Flowable.fromIterable(events)
+                .observeOn(Schedulers.computation())
+                .filter(Event::isVisible)
+                .toList();
     }
 
 }
