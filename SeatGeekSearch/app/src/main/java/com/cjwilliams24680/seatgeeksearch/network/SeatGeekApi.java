@@ -12,7 +12,7 @@ import retrofit2.http.Query;
 
 public interface SeatGeekApi {
 
-    @GET("event")
-    Flowable<EventSearchResponse> searchEvents(@Query("q") String searchQuery);
+    @GET("events")
+    Flowable<EventSearchResponse> searchEvents(@Query("q") String searchQuery, @Query("per_page") Integer itemsPerPage);
 
 }

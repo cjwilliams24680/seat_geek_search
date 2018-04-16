@@ -77,7 +77,7 @@ class SearchFragment : BaseFragment(), ListItemCallback<Event> , android.support
      */
     private fun searchEvents(searchQuery: String) {
         disposables.add(
-                seatGeekApi!!.searchEvents(searchQuery)
+                seatGeekApi!!.searchEvents(searchQuery, 20)
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(
                                 {eventsResponse ->
