@@ -1,5 +1,6 @@
 package com.cjwilliams24680.seatgeeksearch.ui.common
 
+import android.support.annotation.StringRes
 import com.cjwilliams24680.seatgeeksearch.dagger.ActivityComponent
 
 /**
@@ -8,4 +9,5 @@ import com.cjwilliams24680.seatgeeksearch.dagger.ActivityComponent
 
 interface BaseFragmentCallback {
     fun getActivityComponent() : ActivityComponent
+    fun showSnackbar(@StringRes text: Int, duration: Int)
 }

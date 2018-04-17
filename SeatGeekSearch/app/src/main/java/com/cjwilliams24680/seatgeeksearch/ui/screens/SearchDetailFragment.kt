@@ -16,7 +16,7 @@ import java.lang.ref.WeakReference
 
 class SearchDetailFragment : BaseFragment() {
 
-    private var binding: SearchDetailFragmentBinding? = null
+    private lateinit var binding: SearchDetailFragmentBinding
     private var callback: WeakReference<BaseFragmentCallback>? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -27,7 +27,7 @@ class SearchDetailFragment : BaseFragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         binding = SearchDetailFragmentBinding.inflate(inflater, container, false)
-        return binding!!.root
+        return binding.root
     }
 
     fun setCallback(callback: SearchFragment.Callback) {

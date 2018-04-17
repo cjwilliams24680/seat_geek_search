@@ -28,6 +28,6 @@ class SearchEventItemView(private val binding: SearchEventItemViewBinding, event
                 .apply(RequestOptions.overrideOf(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL))
                 .transition(DrawableTransitionOptions.withCrossFade())
                 .thumbnail(0.1f)
-                .into(binding.venueIamge)
+                .into(binding.venueImage)
     }
 }

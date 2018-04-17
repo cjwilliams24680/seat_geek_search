@@ -57,7 +57,7 @@ public class NetworkManager {
         if (client == null) {
             client = new OkHttpClient().newBuilder()
                     .addInterceptor(chain -> {
-                        Request request = attachHeaders(chain.request());
+                        Request request = chain.request();
 
                         int numTries = 0;
                         Response response = null;
@@ -85,14 +85,6 @@ public class NetworkManager {
         }
 
         return client;
-    }
-
-    private Request attachHeaders(Request original) {
-        Request.Builder builder =
-                original.newBuilder()
-                        .addHeader("User-Agent", String.format("Basic %s", BuildConfig.SEAT_GEEK_CLIENT_ID));
-
-        return builder.build();
     }
 
 }
