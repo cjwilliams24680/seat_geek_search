@@ -1,5 +1,7 @@
 package com.cjwilliams24680.seatgeeksearch.models;
 
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.support.annotation.NonNull;
 
 import com.google.gson.annotations.Expose;
@@ -16,7 +18,7 @@ import java.util.List;
  * Created by chris on 4/11/18.
  */
 
-public class Event {
+public class Event implements Parcelable {
 
     @Expose
     @SerializedName("venue")
@@ -90,6 +92,59 @@ public class Event {
     String type;
 
     public Event() { }
+
+    protected Event(Parcel in) {
+        venue = in.readParcelable(Venue.class.getClassLoader());
+        isDatetimeTbd = in.readByte() != 0;
+        shortTitle = in.readString();
+        popularity = in.readDouble();
+        stats = in.readParcelable(EventStats.class.getClassLoader());
+        if (in.readByte() == 0) {
+            id = null;
+        } else {
+            id = in.readInt();
+        }
+        performerList = in.createTypedArrayList(Performer.CREATOR);
+        title = in.readString();
+        url = in.readString();
+        type = in.readString();
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeParcelable(venue, flags);
+        dest.writeByte((byte) (isDatetimeTbd ? 1 : 0));
+        dest.writeString(shortTitle);
+        dest.writeDouble(popularity);
+        dest.writeParcelable(stats, flags);
+        if (id == null) {
+            dest.writeByte((byte) 0);
+        } else {
+            dest.writeByte((byte) 1);
+            dest.writeInt(id);
+        }
+        dest.writeTypedList(performerList);
+        dest.writeString(title);
+        dest.writeString(url);
+        dest.writeString(type);
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    public static final Creator<Event> CREATOR = new Creator<Event>() {
+        @Override
+        public Event createFromParcel(Parcel in) {
+            return new Event(in);
+        }
+
+        @Override
+        public Event[] newArray(int size) {
+            return new Event[size];
+        }
+    };
 
     @NonNull
     public Venue getVenue() {

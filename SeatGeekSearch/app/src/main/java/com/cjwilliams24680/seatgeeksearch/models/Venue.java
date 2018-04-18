@@ -1,5 +1,7 @@
 package com.cjwilliams24680.seatgeeksearch.models;
 
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.support.annotation.NonNull;
 
 import com.google.gson.annotations.Expose;
@@ -9,7 +11,7 @@ import com.google.gson.annotations.SerializedName;
  * Created by chris on 4/11/18.
  */
 
-public class Venue {
+public class Venue implements Parcelable {
 
     @Expose
     @SerializedName("url")
@@ -29,10 +31,33 @@ public class Venue {
 
     @Expose
     @SerializedName("id")
-    @NonNull
     Integer id;
 
     public Venue() { }
+
+    protected Venue(Parcel in) {
+        url = in.readString();
+        address = in.readString();
+        extendedAddress = in.readString();
+        numberOfUpcomingEvents = in.readInt();
+        if (in.readByte() == 0) {
+            id = null;
+        } else {
+            id = in.readInt();
+        }
+    }
+
+    public static final Creator<Venue> CREATOR = new Creator<Venue>() {
+        @Override
+        public Venue createFromParcel(Parcel in) {
+            return new Venue(in);
+        }
+
+        @Override
+        public Venue[] newArray(int size) {
+            return new Venue[size];
+        }
+    };
 
     public String getUrl() {
         return url;
@@ -50,8 +75,26 @@ public class Venue {
         return numberOfUpcomingEvents;
     }
 
-    @NonNull
     public Integer getId() {
         return id;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(url);
+        dest.writeString(address);
+        dest.writeString(extendedAddress);
+        dest.writeInt(numberOfUpcomingEvents);
+        if (id == null) {
+            dest.writeByte((byte) 0);
+        } else {
+            dest.writeByte((byte) 1);
+            dest.writeInt(id);
+        }
     }
 }
