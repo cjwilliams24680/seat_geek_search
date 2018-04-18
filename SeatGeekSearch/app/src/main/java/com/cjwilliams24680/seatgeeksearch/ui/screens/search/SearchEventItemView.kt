@@ -24,7 +24,7 @@ class SearchEventItemView(private val binding: SearchEventItemViewBinding, event
 
         // Keep original size so that it we don't need to reload when going to search detail
         Glide.with(binding.root)
-                .load(event.performerList[0].images.huge)
+                .load(event.performerList[0].image)
                 .apply(RequestOptions.overrideOf(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL))
                 .transition(DrawableTransitionOptions.withCrossFade())
                 .thumbnail(0.1f)

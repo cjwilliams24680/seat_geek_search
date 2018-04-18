@@ -16,8 +16,8 @@ public class Performer {
     boolean isPrimary;
 
     @Expose
-    @SerializedName("images")
-    Images images;
+    @SerializedName("image")
+    String image;
 
     public Performer() { }
 
@@ -25,7 +25,7 @@ public class Performer {
         return isPrimary;
     }
 
-    public Images getImages() {
-        return images;
+    public String getImage() {
+        return image;
     }
 }

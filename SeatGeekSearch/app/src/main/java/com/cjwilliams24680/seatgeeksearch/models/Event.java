@@ -8,6 +8,7 @@ import com.google.gson.annotations.SerializedName;
 
 import org.threeten.bp.LocalDateTime;
 import org.threeten.bp.ZonedDateTime;
+import org.threeten.bp.format.DateTimeFormatter;
 
 import java.util.List;
 
@@ -159,5 +160,9 @@ public class Event {
 
     public boolean isVisible() {
         return ZonedDateTime.now().isBefore(visibleUntilUtc);
+    }
+
+    public String getShortDateTime() {
+        return DateTimeFormatter.ofPattern("MM/dd hh:mm a").format(dateTimeLocal);
     }
 }

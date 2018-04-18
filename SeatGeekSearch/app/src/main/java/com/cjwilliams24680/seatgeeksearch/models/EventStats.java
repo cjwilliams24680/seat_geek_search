@@ -14,8 +14,8 @@ public class EventStats {
     int listingCount;
 
     @Expose
-    @SerializedName("highest_price")
-    int highestPrice;
+    @SerializedName("lowest_price")
+    int lowestPrice;
 
     public EventStats() { }
 
@@ -23,8 +23,8 @@ public class EventStats {
         return listingCount;
     }
 
-    public int getHighestPrice() {
-        return highestPrice;
+    public int getLowestPrice() {
+        return lowestPrice;
     }
 
 }

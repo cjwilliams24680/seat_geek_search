@@ -114,6 +114,7 @@ class SearchFragment : BaseFragment(), ListItemCallback<Event> , android.support
         // i believe this should close the keyboard and remove the cursor but i'll need to test
         binding.eventsList.requestFocus()
         showLoadingSpinner(true)
+        hideKeyboard()
         textChangeBuffer.onNext(TextUtils.nonNullify(query))
         return true
     }
