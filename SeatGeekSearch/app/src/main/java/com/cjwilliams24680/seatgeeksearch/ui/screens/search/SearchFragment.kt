@@ -2,10 +2,9 @@ package com.cjwilliams24680.seatgeeksearch.ui.screens.search
 
 import android.os.Bundle
 import android.support.design.widget.Snackbar
+import android.support.v7.widget.SearchView
 import android.util.Log
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import com.cjwilliams24680.seatgeeksearch.BuildConfig
 import com.cjwilliams24680.seatgeeksearch.R
 import com.cjwilliams24680.seatgeeksearch.databinding.SearchFragmentBinding
@@ -46,6 +45,7 @@ class SearchFragment : BaseFragment(), ListItemCallback<Event> , android.support
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setHasOptionsMenu(true)
         callback!!.get()!!.getActivityComponent().inject(this)
 
         // todo make this the context of the last search?
@@ -55,8 +55,15 @@ class SearchFragment : BaseFragment(), ListItemCallback<Event> , android.support
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         binding = SearchFragmentBinding.inflate(inflater, container, false)
         binding.eventsList.adapter = adapter
-        binding.searchField.setOnQueryTextListener(this)
         return binding.root
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?, menuInflater: MenuInflater) {
+        menuInflater.inflate(R.menu.search_menu, menu)
+
+        val searchItem = menu?.findItem(R.id.action_search)
+        val searchView = searchItem?.actionView as SearchView
+        searchView.setOnQueryTextListener(this)
     }
 
     override fun onStart() {

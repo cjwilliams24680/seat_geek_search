@@ -3,32 +3,16 @@
         xmlns:tools="http://schemas.android.com/tools"
         xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <android.support.constraint.ConstraintLayout
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
         tools:context=".ui.screens.search.SearchFragment">
 
-        <android.support.constraint.Guideline
-            android:id="@+id/bottom_of_search"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            app:layout_constraintGuide_begin="50dp"/>
-
-        <android.support.v7.widget.SearchView
-            android:id="@+id/search_field"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toTopOf="@id/bottom_of_search"/>
-
         <android.support.v7.widget.RecyclerView
             android:id="@+id/events_list"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            app:layout_constraintTop_toTopOf="@id/bottom_of_search"
-            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_height="match_parent"
             app:layoutManager="android.support.v7.widget.LinearLayoutManager"/>
 
         <ProgressBar
@@ -36,9 +20,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:visibility="gone"
-            app:layout_constraintTop_toTopOf="@id/bottom_of_search"/>
+            android:visibility="gone"/>
 
-    </android.support.constraint.ConstraintLayout>
+    </FrameLayout>
 
 </layout>

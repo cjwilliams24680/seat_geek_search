@@ -2,4 +2,5 @@
     <string name="app_name">SeatGeekSearch</string>
     <string name="an_error_occurred">An error occurred</string>
     <string name="x_listings_from_y_dollars">%1$d listings from $%2$d+</string>
+    <string name="search">Search</string>
 </resources>
