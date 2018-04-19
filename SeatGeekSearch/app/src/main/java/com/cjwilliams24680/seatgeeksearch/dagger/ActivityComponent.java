@@ -1,6 +1,6 @@
 package com.cjwilliams24680.seatgeeksearch.dagger;
 
-import com.cjwilliams24680.seatgeeksearch.ui.screens.SearchDetailFragment;
+import com.cjwilliams24680.seatgeeksearch.ui.screens.searchDetail.SearchDetailFragment;
 import com.cjwilliams24680.seatgeeksearch.ui.screens.search.SearchFragment;
 
 import dagger.Subcomponent;

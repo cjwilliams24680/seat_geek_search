@@ -220,4 +220,8 @@ public class Event implements Parcelable {
     public String getShortDateTime() {
         return DateTimeFormatter.ofPattern("MM/dd hh:mm a").format(dateTimeLocal);
     }
+
+    public String getLongDateTime() {
+        return DateTimeFormatter.ofPattern("EEE MMM dd, yyyy hh:mm a").format(dateTimeLocal);
+    }
 }

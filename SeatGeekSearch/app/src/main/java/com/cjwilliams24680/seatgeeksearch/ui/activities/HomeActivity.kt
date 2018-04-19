@@ -12,7 +12,7 @@ import com.cjwilliams24680.seatgeeksearch.dagger.ActivityModule
 import com.cjwilliams24680.seatgeeksearch.dagger.DaggerManager
 import com.cjwilliams24680.seatgeeksearch.databinding.HomeActivityBinding
 import com.cjwilliams24680.seatgeeksearch.models.Event
-import com.cjwilliams24680.seatgeeksearch.ui.screens.SearchDetailFragment
+import com.cjwilliams24680.seatgeeksearch.ui.screens.searchDetail.SearchDetailFragment
 import com.cjwilliams24680.seatgeeksearch.ui.screens.search.SearchFragment
 
 class HomeActivity : AppCompatActivity(), SearchFragment.Callback, FragmentManager.OnBackStackChangedListener {

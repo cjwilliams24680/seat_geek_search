@@ -2,7 +2,6 @@ package com.cjwilliams24680.seatgeeksearch.models;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.support.annotation.NonNull;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
@@ -33,6 +32,14 @@ public class Venue implements Parcelable {
     @SerializedName("id")
     Integer id;
 
+    @Expose
+    @SerializedName("name_v2")
+    String name;
+
+    @Expose
+    @SerializedName("display_location")
+    String displayLocation;
+
     public Venue() { }
 
     protected Venue(Parcel in) {
@@ -45,6 +52,8 @@ public class Venue implements Parcelable {
         } else {
             id = in.readInt();
         }
+        name = in.readString();
+        displayLocation = in.readString();
     }
 
     public static final Creator<Venue> CREATOR = new Creator<Venue>() {
@@ -79,6 +88,14 @@ public class Venue implements Parcelable {
         return id;
     }
 
+    public String getName() {
+        return name;
+    }
+
+    public String getDisplayLocation() {
+        return displayLocation;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -96,5 +113,7 @@ public class Venue implements Parcelable {
             dest.writeByte((byte) 1);
             dest.writeInt(id);
         }
+        dest.writeString(name);
+        dest.writeString(displayLocation);
     }
 }

@@ -3,4 +3,6 @@
     <string name="an_error_occurred">An error occurred</string>
     <string name="x_listings_from_y_dollars">%1$d listings from $%2$d+</string>
     <string name="search">Search</string>
+    <string name="x_in_y">%1$s in %2$s</string>
+    <string name="view_on_seatgeek">View on SeatGeek</string>
 </resources>
