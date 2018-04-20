@@ -80,6 +80,7 @@ class SearchFragment : BaseFragment(), ListItemCallback<Event> , android.support
         disposables.add(
                 textChangeBuffer.subscribeOn(Schedulers.io())
                         .debounce(300, TimeUnit.MILLISECONDS)
+                        .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(
                                 this::searchEvents,
                                 {error -> Log.e(TAG, "An error occurred while processing search text", error)}))
