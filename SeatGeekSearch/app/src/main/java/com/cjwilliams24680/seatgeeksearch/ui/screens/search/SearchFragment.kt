@@ -7,7 +7,9 @@ import android.util.Log
 import android.view.*
 import com.cjwilliams24680.seatgeeksearch.BuildConfig
 import com.cjwilliams24680.seatgeeksearch.R
+import com.cjwilliams24680.seatgeeksearch.data.UserPreferences
 import com.cjwilliams24680.seatgeeksearch.databinding.SearchFragmentBinding
+import com.cjwilliams24680.seatgeeksearch.models.CloudUtils
 import com.cjwilliams24680.seatgeeksearch.models.Event
 import com.cjwilliams24680.seatgeeksearch.network.SeatGeekApi
 import com.cjwilliams24680.seatgeeksearch.ui.common.BaseFragment
@@ -15,7 +17,7 @@ import com.cjwilliams24680.seatgeeksearch.ui.common.BaseFragmentCallback
 import com.cjwilliams24680.seatgeeksearch.ui.common.ListItemCallback
 import com.cjwilliams24680.seatgeeksearch.utils.TextUtils
 import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.processors.BehaviorProcessor
+import io.reactivex.processors.PublishProcessor
 import io.reactivex.schedulers.Schedulers
 import java.lang.ref.WeakReference
 import java.util.concurrent.TimeUnit
@@ -36,26 +38,31 @@ class SearchFragment : BaseFragment(), ListItemCallback<Event> , android.support
     }
 
     @Inject lateinit var seatGeekApi: SeatGeekApi
+    @Inject lateinit var userPreferences: UserPreferences
 
     private lateinit var binding: SearchFragmentBinding
     private val adapter: SearchAdapter = SearchAdapter(this)
     private var callback: WeakReference<Callback>? = null
 
-    private val textChangeBuffer: BehaviorProcessor<String> = BehaviorProcessor.create()
+    private val textChangeBuffer: PublishProcessor<String> = PublishProcessor.create()
+    private var lastQuery = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
         callback!!.get()!!.getActivityComponent().inject(this)
-
-        // todo make this the context of the last search?
-        textChangeBuffer.onNext("")
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         binding = SearchFragmentBinding.inflate(inflater, container, false)
         binding.eventsList.adapter = adapter
         return binding.root
+    }
+
+    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        showLoadingSpinner(true)
+        searchEvents(userPreferences.getLastQuery())
     }
 
     override fun onCreateOptionsMenu(menu: Menu?, menuInflater: MenuInflater) {
@@ -78,20 +85,28 @@ class SearchFragment : BaseFragment(), ListItemCallback<Event> , android.support
                                 {error -> Log.e(TAG, "An error occurred while processing search text", error)}))
     }
 
+    override fun onStop() {
+        super.onStop()
+        userPreferences.setLastQuery(lastQuery)
+    }
+
     fun setCallback(callback: Callback) {
         this.callback = WeakReference(callback)
     }
 
-    /**
-     * todo write a diff util so the items animate in rather than just flash/appear
-     */
     private fun searchEvents(searchQuery: String) {
+        if (searchQuery == lastQuery) {
+            showLoadingSpinner(false)
+            return
+        }
+
         disposables.add(
                 seatGeekApi.searchEvents(searchQuery, 20, BuildConfig.SEAT_GEEK_CLIENT_ID)
-                        .flatMapSingle { eventsResponse -> eventsResponse.visibleEvents }
+                        .flatMapSingle { response -> CloudUtils.filterExpiredEvents(response.events) }
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(
                                 {events ->
+                                    lastQuery = searchQuery
                                     adapter.events = events
                                     adapter.notifyDataSetChanged()
                                     showLoadingSpinner(false)

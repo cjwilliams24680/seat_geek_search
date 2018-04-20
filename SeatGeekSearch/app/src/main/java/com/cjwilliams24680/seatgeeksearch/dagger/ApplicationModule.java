@@ -2,10 +2,13 @@ package com.cjwilliams24680.seatgeeksearch.dagger;
 
 import android.app.Application;
 
+import com.cjwilliams24680.seatgeeksearch.data.UserPreferences;
 import com.cjwilliams24680.seatgeeksearch.network.NetworkManager;
 import com.cjwilliams24680.seatgeeksearch.network.SeatGeekApi;
 
 import java.lang.ref.WeakReference;
+
+import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
@@ -28,6 +31,11 @@ public class ApplicationModule {
     @Provides
     SeatGeekApi providesSeatGeekApi(NetworkManager networkManager) {
         return networkManager.getSeatGeekApi();
+    }
+
+    @Provides @Singleton
+    UserPreferences providesUserPreferences() {
+        return new UserPreferences(application.get());
     }
 
 }

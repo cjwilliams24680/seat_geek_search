@@ -17,7 +17,7 @@ android {
         targetSdkVersion 26
         versionCode 1
         versionName "1.0"
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner "com.cjwilliams24680.seatgeeksearch.TestRunner"
 
         // I don't want to add my private token here since the repo will be public
         // If you want to run this app yourself, you can get your own client token and add it to your ~/.gradle/gradle.properties folder

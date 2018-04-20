@@ -3,6 +3,7 @@ package com.cjwilliams24680.seatgeeksearch.models;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.support.annotation.NonNull;
+import android.support.annotation.VisibleForTesting;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.JsonAdapter;
@@ -52,7 +53,7 @@ public class Event implements Parcelable {
     @Expose
     @SerializedName("id")
     @NonNull
-    Integer id;
+    Long id;
 
     @Expose
     @SerializedName("visible_until_utc")
@@ -102,7 +103,7 @@ public class Event implements Parcelable {
         if (in.readByte() == 0) {
             id = null;
         } else {
-            id = in.readInt();
+            id = in.readLong();
         }
         performerList = in.createTypedArrayList(Performer.CREATOR);
         title = in.readString();
@@ -121,7 +122,7 @@ public class Event implements Parcelable {
             dest.writeByte((byte) 0);
         } else {
             dest.writeByte((byte) 1);
-            dest.writeInt(id);
+            dest.writeLong(id);
         }
         dest.writeTypedList(performerList);
         dest.writeString(title);
@@ -175,7 +176,7 @@ public class Event implements Parcelable {
     }
 
     @NonNull
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
