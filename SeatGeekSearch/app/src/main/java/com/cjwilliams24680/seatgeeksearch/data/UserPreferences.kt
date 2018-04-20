@@ -1,6 +1,7 @@
 package com.cjwilliams24680.seatgeeksearch.data
 
 import android.content.Context
+import android.support.annotation.VisibleForTesting
 import java.util.HashSet
 
 /**
@@ -11,7 +12,7 @@ class UserPreferences(context: Context) {
     private val FAVORITED_EVENTS_KEY = "FAVORITED_EVENTS_KEY"
     private val LAST_SEARCH_QUERY = "LAST_SEARCH_QUERY"
     private val sharedPreferences = context.getSharedPreferences("UserPreferences", Context.MODE_PRIVATE)
-    private val favoritedEvents = sharedPreferences.getStringSet(FAVORITED_EVENTS_KEY, HashSet<String>())
+    private var favoritedEvents = sharedPreferences.getStringSet(FAVORITED_EVENTS_KEY, HashSet<String>())
 
     fun toggleFavorite(eventId: Long) {
         if (isFavorite(eventId)) {
@@ -43,6 +44,14 @@ class UserPreferences(context: Context) {
 
     fun getLastQuery(): String {
         return sharedPreferences.getString(LAST_SEARCH_QUERY, "")
+    }
+
+    @VisibleForTesting fun clearPreferences() {
+        sharedPreferences.edit().clear().apply()
+    }
+
+    @VisibleForTesting fun clearCache() {
+        favoritedEvents = sharedPreferences.getStringSet(FAVORITED_EVENTS_KEY, HashSet<String>())
     }
 
 }

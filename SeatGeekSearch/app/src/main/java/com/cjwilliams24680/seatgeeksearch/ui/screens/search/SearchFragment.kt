@@ -95,7 +95,7 @@ class SearchFragment : BaseFragment(), ListItemCallback<Event> , android.support
     }
 
     private fun searchEvents(searchQuery: String) {
-        if (searchQuery == lastQuery) {
+        if (TextUtils.isBlank(searchQuery) && searchQuery == lastQuery) {
             showLoadingSpinner(false)
             return
         }

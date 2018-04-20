@@ -48,6 +48,7 @@ class SearchDetailFragment : BaseFragment(), SearchDetailBindingListener {
         super.onCreate(savedInstanceState)
         event = arguments.getParcelable(EVENT_KEY)
         callback!!.get()!!.getActivityComponent().inject(this)
+        setHasOptionsMenu(true)
 
     }
 
