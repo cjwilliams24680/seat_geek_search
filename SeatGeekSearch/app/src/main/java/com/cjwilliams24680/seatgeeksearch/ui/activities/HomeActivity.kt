@@ -1,11 +1,11 @@
 package com.cjwilliams24680.seatgeeksearch.ui.activities
 
-import android.app.FragmentManager
-import android.databinding.DataBindingUtil
-import android.support.v7.app.AppCompatActivity
+import androidx.databinding.DataBindingUtil
 import android.os.Bundle
-import android.support.annotation.StringRes
-import android.support.design.widget.Snackbar
+import androidx.annotation.StringRes
+import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.FragmentManager
+import com.google.android.material.snackbar.Snackbar
 import com.cjwilliams24680.seatgeeksearch.R
 import com.cjwilliams24680.seatgeeksearch.dagger.ActivityComponent
 import com.cjwilliams24680.seatgeeksearch.dagger.ActivityModule
@@ -26,15 +26,15 @@ class HomeActivity : AppCompatActivity(), SearchFragment.Callback, FragmentManag
         binding = DataBindingUtil.setContentView(this, R.layout.home_activity)
         val searchFragment = SearchFragment()
         searchFragment.setCallback(this)
-        fragmentManager.beginTransaction().add(R.id.container, searchFragment).commit()
-        fragmentManager.addOnBackStackChangedListener(this)
+        supportFragmentManager.beginTransaction().add(R.id.container, searchFragment).commit()
+        supportFragmentManager.addOnBackStackChangedListener(this)
     }
 
     override fun onSearchItemSelected(event: Event) {
         val searchDetailFragment = SearchDetailFragment.create(event)
         searchDetailFragment.setCallback(this)
 
-        fragmentManager.beginTransaction()
+        supportFragmentManager.beginTransaction()
                 .replace(R.id.container, searchDetailFragment)
                 .addToBackStack("SearchDetailFragment")
                 .commit()
@@ -49,12 +49,12 @@ class HomeActivity : AppCompatActivity(), SearchFragment.Callback, FragmentManag
     }
 
     override fun onBackStackChanged() {
-        supportActionBar!!.setDisplayHomeAsUpEnabled(fragmentManager.backStackEntryCount > 0)
+        supportActionBar!!.setDisplayHomeAsUpEnabled(supportFragmentManager.backStackEntryCount > 0)
     }
 
     override fun onSupportNavigateUp(): Boolean {
-        if (fragmentManager.backStackEntryCount > 0) {
-            fragmentManager.popBackStack()
+        if (supportFragmentManager.backStackEntryCount > 0) {
+            supportFragmentManager.popBackStack()
             return true
         }
 

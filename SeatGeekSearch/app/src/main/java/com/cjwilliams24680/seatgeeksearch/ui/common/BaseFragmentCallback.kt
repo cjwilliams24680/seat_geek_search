@@ -1,6 +1,6 @@
 package com.cjwilliams24680.seatgeeksearch.ui.common
 
-import android.support.annotation.StringRes
+import androidx.annotation.StringRes
 import com.cjwilliams24680.seatgeeksearch.dagger.ActivityComponent
 
 /**

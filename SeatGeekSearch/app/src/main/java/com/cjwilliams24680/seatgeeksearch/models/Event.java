@@ -2,8 +2,8 @@ package com.cjwilliams24680.seatgeeksearch.models;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.support.annotation.NonNull;
-import android.support.annotation.VisibleForTesting;
+import androidx.annotation.NonNull;
+import androidx.annotation.VisibleForTesting;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.JsonAdapter;

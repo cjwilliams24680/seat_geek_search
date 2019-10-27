@@ -8,11 +8,11 @@
         <variable name="event" type="com.cjwilliams24680.seatgeeksearch.models.Event"/>
     </data>
 
-    <android.support.constraint.ConstraintLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <android.support.constraint.Guideline
+        <androidx.constraintlayout.widget.Guideline
             android:id="@+id/search_header_bottom"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -74,6 +74,6 @@
         </LinearLayout>
 
 
-    </android.support.constraint.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </layout>

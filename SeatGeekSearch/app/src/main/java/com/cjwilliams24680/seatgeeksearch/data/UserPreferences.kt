@@ -1,7 +1,7 @@
 package com.cjwilliams24680.seatgeeksearch.data
 
 import android.content.Context
-import android.support.annotation.VisibleForTesting
+import androidx.annotation.VisibleForTesting
 import java.util.HashSet
 
 /**
@@ -24,17 +24,17 @@ class UserPreferences(context: Context) {
 
     private fun addFavorite(eventId: Long) {
         val stringVersion = eventId.toString()
-        favoritedEvents.add(stringVersion)
+        favoritedEvents?.add(stringVersion)
         sharedPreferences.edit().putStringSet(FAVORITED_EVENTS_KEY, favoritedEvents).apply()
     }
 
     fun isFavorite(eventId: Long): Boolean {
-        return favoritedEvents.contains(eventId.toString())
+        return favoritedEvents?.contains(eventId.toString()) ?: false
     }
 
     private fun removeFavorite(eventId: Long) {
         val stringVersion = eventId.toString()
-        favoritedEvents.remove(stringVersion)
+        favoritedEvents?.remove(stringVersion)
         sharedPreferences.edit().putStringSet(FAVORITED_EVENTS_KEY, favoritedEvents).apply()
     }
 
@@ -43,7 +43,7 @@ class UserPreferences(context: Context) {
     }
 
     fun getLastQuery(): String {
-        return sharedPreferences.getString(LAST_SEARCH_QUERY, "")
+        return sharedPreferences.getString(LAST_SEARCH_QUERY, "") ?: ""
     }
 
     @VisibleForTesting fun clearPreferences() {

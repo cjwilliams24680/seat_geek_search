@@ -12,7 +12,7 @@ import com.cjwilliams24680.seatgeeksearch.ui.screens.search.SearchFragment
 import java.lang.ref.WeakReference
 import android.content.Intent
 import android.net.Uri
-import android.support.v4.content.res.ResourcesCompat
+import androidx.core.content.res.ResourcesCompat
 import android.view.*
 import com.cjwilliams24680.seatgeeksearch.R
 import com.cjwilliams24680.seatgeeksearch.data.UserPreferences
@@ -46,7 +46,7 @@ class SearchDetailFragment : BaseFragment(), SearchDetailBindingListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        event = arguments.getParcelable(EVENT_KEY)
+        event = arguments!!.getParcelable(EVENT_KEY)!!
         callback!!.get()!!.getActivityComponent().inject(this)
         setHasOptionsMenu(true)
 
@@ -67,9 +67,9 @@ class SearchDetailFragment : BaseFragment(), SearchDetailBindingListener {
         return binding.root
     }
 
-    override fun onCreateOptionsMenu(menu: Menu?, menuInflater: MenuInflater) {
+    override fun onCreateOptionsMenu(menu: Menu, menuInflater: MenuInflater) {
         menuInflater.inflate(R.menu.search_detail_menu, menu)
-        favoriteIcon = menu?.findItem(R.id.action_favorite)!!
+        favoriteIcon = menu.findItem(R.id.action_favorite)!!
         updateFavoriteIcon()
     }
 

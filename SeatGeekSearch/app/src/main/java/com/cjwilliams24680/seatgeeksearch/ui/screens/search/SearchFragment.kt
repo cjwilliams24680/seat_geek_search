@@ -1,8 +1,8 @@
 package com.cjwilliams24680.seatgeeksearch.ui.screens.search
 
 import android.os.Bundle
-import android.support.design.widget.Snackbar
-import android.support.v7.widget.SearchView
+import com.google.android.material.snackbar.Snackbar
+import androidx.appcompat.widget.SearchView
 import android.util.Log
 import android.view.*
 import com.cjwilliams24680.seatgeeksearch.BuildConfig
@@ -27,7 +27,7 @@ import javax.inject.Inject
  * Created by chris on 4/15/18.
  */
 
-class SearchFragment : BaseFragment(), ListItemCallback<Event> , android.support.v7.widget.SearchView.OnQueryTextListener{
+class SearchFragment : BaseFragment(), ListItemCallback<Event> , SearchView.OnQueryTextListener{
 
     companion object {
         val TAG = "SearchFragment"
@@ -59,16 +59,16 @@ class SearchFragment : BaseFragment(), ListItemCallback<Event> , android.support
         return binding.root
     }
 
-    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         showLoadingSpinner(true)
         searchEvents(userPreferences.getLastQuery())
     }
 
-    override fun onCreateOptionsMenu(menu: Menu?, menuInflater: MenuInflater) {
+    override fun onCreateOptionsMenu(menu: Menu, menuInflater: MenuInflater) {
         menuInflater.inflate(R.menu.search_menu, menu)
 
-        val searchItem = menu?.findItem(R.id.action_search)
+        val searchItem = menu.findItem(R.id.action_search)
         val searchView = searchItem?.actionView as SearchView
         searchView.setOnQueryTextListener(this)
     }
