@@ -15,10 +15,10 @@ import com.cjwilliams24680.seatgeeksearch.di.DaggerManager
 import com.cjwilliams24680.seatgeeksearch.models.CloudUtils
 import com.cjwilliams24680.seatgeeksearch.models.Event
 import com.cjwilliams24680.seatgeeksearch.network.SeatGeekApi
+import com.cjwilliams24680.seatgeeksearch.repositories.EventRepository
 import com.cjwilliams24680.seatgeeksearch.ui.common.BaseFragment
 import com.cjwilliams24680.seatgeeksearch.ui.common.BaseFragmentCallback
 import com.cjwilliams24680.seatgeeksearch.ui.common.ListItemCallback
-import com.cjwilliams24680.seatgeeksearch.utils.TextUtils
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.processors.PublishProcessor
 import io.reactivex.schedulers.Schedulers
@@ -42,7 +42,7 @@ class SearchFragment : BaseFragment(), ListItemCallback<Event> , SearchView.OnQu
 
     @Inject lateinit var viewModelFactory: ViewModelProvider.Factory
 
-    @Inject lateinit var seatGeekApi: SeatGeekApi
+    @Inject lateinit var eventRepository: EventRepository
     @Inject lateinit var userPreferences: UserPreferences
 
     private lateinit var searchViewModel: SearchViewModel
@@ -104,14 +104,13 @@ class SearchFragment : BaseFragment(), ListItemCallback<Event> , SearchView.OnQu
     }
 
     private fun searchEvents(searchQuery: String) {
-        if (TextUtils.isBlank(searchQuery) && searchQuery == lastQuery) {
+        if (searchQuery.isBlank() && searchQuery == lastQuery) {
             showLoadingSpinner(false)
             return
         }
 
         disposables.add(
-                seatGeekApi.searchEvents(searchQuery, 20, BuildConfig.SEAT_GEEK_CLIENT_ID)
-                        .flatMapSingle { response -> CloudUtils.filterExpiredEvents(response.events) }
+                eventRepository.getActiveEventsRx(searchQuery)
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(
                                 {events ->
@@ -146,13 +145,13 @@ class SearchFragment : BaseFragment(), ListItemCallback<Event> , SearchView.OnQu
         binding.eventsList.requestFocus()
         showLoadingSpinner(true)
         hideKeyboard()
-        textChangeBuffer.onNext(TextUtils.nonNullify(query))
+        textChangeBuffer.onNext(query ?: "")
         return true
     }
 
     override fun onQueryTextChange(newText: String?): Boolean {
         showLoadingSpinner(false)
-        textChangeBuffer.onNext(TextUtils.nonNullify(newText))
+        textChangeBuffer.onNext(newText ?: "")
         return true
     }
 }
