@@ -5,7 +5,7 @@
 
     <data>
         <variable name="listener" type="com.cjwilliams24680.seatgeeksearch.ui.screens.searchDetail.SearchDetailBindingListener"/>
-        <variable name="event" type="com.cjwilliams24680.seatgeeksearch.models.Event"/>
+        <variable name="event" type="com.cjwilliams24680.seatgeeksearch.network.models.Event"/>
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

@@ -1,4 +1,4 @@
-package com.cjwilliams24680.seatgeeksearch.models
+package com.cjwilliams24680.seatgeeksearch.network.models
 
 import android.os.Parcelable
 import com.google.gson.annotations.JsonAdapter
@@ -6,7 +6,6 @@ import com.google.gson.annotations.SerializedName
 import kotlinx.android.parcel.Parcelize
 import org.threeten.bp.LocalDateTime
 import org.threeten.bp.ZonedDateTime
-import org.threeten.bp.format.DateTimeFormatter
 
 /**
  * Created by chris on 4/11/18.

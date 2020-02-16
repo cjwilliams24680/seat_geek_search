@@ -1,4 +1,4 @@
-package com.cjwilliams24680.seatgeeksearch.models
+package com.cjwilliams24680.seatgeeksearch.network.models
 
 import io.reactivex.Flowable
 import io.reactivex.Single

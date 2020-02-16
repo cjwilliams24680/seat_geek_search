@@ -1,4 +1,4 @@
-package com.cjwilliams24680.seatgeeksearch.models
+package com.cjwilliams24680.seatgeeksearch.network.models
 
 import android.os.Parcelable
 import com.google.gson.annotations.SerializedName

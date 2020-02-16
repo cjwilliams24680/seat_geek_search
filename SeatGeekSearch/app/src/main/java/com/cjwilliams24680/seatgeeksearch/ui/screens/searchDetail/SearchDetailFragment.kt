@@ -5,7 +5,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.bumptech.glide.request.target.Target
 import com.cjwilliams24680.seatgeeksearch.databinding.SearchDetailFragmentBinding
-import com.cjwilliams24680.seatgeeksearch.models.Event
+import com.cjwilliams24680.seatgeeksearch.network.models.Event
 import com.cjwilliams24680.seatgeeksearch.ui.common.BaseFragment
 import com.cjwilliams24680.seatgeeksearch.ui.common.BaseFragmentCallback
 import com.cjwilliams24680.seatgeeksearch.ui.screens.search.SearchFragment

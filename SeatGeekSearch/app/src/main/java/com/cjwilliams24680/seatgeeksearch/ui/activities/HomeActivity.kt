@@ -11,14 +11,14 @@ import com.cjwilliams24680.seatgeeksearch.di.ActivityComponent
 import com.cjwilliams24680.seatgeeksearch.di.ActivityModule
 import com.cjwilliams24680.seatgeeksearch.di.DaggerManager
 import com.cjwilliams24680.seatgeeksearch.databinding.HomeActivityBinding
-import com.cjwilliams24680.seatgeeksearch.models.Event
+import com.cjwilliams24680.seatgeeksearch.network.models.Event
 import com.cjwilliams24680.seatgeeksearch.ui.screens.searchDetail.SearchDetailFragment
 import com.cjwilliams24680.seatgeeksearch.ui.screens.search.SearchFragment
 
 class HomeActivity : AppCompatActivity(), SearchFragment.Callback, FragmentManager.OnBackStackChangedListener {
 
     private lateinit var binding: HomeActivityBinding
-    private val activityComponent: ActivityComponent = DaggerManager.getApplicationComponent().plus(ActivityModule(this))
+    val activityComponent: ActivityComponent = DaggerManager.getApplicationComponent().plus(ActivityModule(this))
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,14 +38,6 @@ class HomeActivity : AppCompatActivity(), SearchFragment.Callback, FragmentManag
                 .replace(R.id.container, searchDetailFragment)
                 .addToBackStack("SearchDetailFragment")
                 .commit()
-    }
-
-    override fun getActivityComponent(): ActivityComponent {
-        return activityComponent
-    }
-
-    override fun showSnackbar(@StringRes text: Int, duration: Int) {
-        Snackbar.make(binding.root, text, duration).show()
     }
 
     override fun onBackStackChanged() {

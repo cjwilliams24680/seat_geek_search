@@ -1,4 +1,4 @@
-package com.cjwilliams24680.seatgeeksearch.models
+package com.cjwilliams24680.seatgeeksearch.network.models
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import junit.framework.Assert

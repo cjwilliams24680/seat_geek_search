@@ -1,6 +1,6 @@
 package com.cjwilliams24680.seatgeeksearch.network;
 
-import com.cjwilliams24680.seatgeeksearch.models.EventSearchResponse;
+import com.cjwilliams24680.seatgeeksearch.network.models.EventSearchResponse;
 
 import io.reactivex.Flowable;
 import retrofit2.Response

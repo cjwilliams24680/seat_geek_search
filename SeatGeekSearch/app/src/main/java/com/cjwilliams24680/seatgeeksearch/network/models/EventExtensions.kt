@@ -1,4 +1,4 @@
-package com.cjwilliams24680.seatgeeksearch.models
+package com.cjwilliams24680.seatgeeksearch.network.models
 
 import org.threeten.bp.ZonedDateTime
 import org.threeten.bp.format.DateTimeFormatter

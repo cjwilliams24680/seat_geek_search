@@ -4,13 +4,17 @@
 
     <data>
         <import type="android.view.View"/>
-        <variable name="event" type="com.cjwilliams24680.seatgeeksearch.models.Event"/>
+        <import type="com.cjwilliams24680.seatgeeksearch.ui.common.ListItemCallback"/>
+        <import type="com.cjwilliams24680.seatgeeksearch.network.models.Event"/>
+        <variable name="data" type="com.cjwilliams24680.seatgeeksearch.ui.screens.search.SearchResultUIModel"/>
+        <variable name="callback" type="ListItemCallback&lt;Event>"/>
     </data>
 
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="@dimen/search_tile_height"
-        android:layout_margin="@dimen/default_parent_padding">
+        android:layout_margin="@dimen/default_parent_padding"
+        android:onClick="@{()->callback.onItemSelected(data.event)}">
 
         <ImageView
             android:id="@+id/venue_image"
@@ -26,7 +30,7 @@
             android:layout_margin="@dimen/default_parent_padding"
             android:padding="2dp"
             android:background="@color/thirtyPctBlack"
-            android:text="@{event.shortDateTime}"
+            android:text="@{event.date}"
             tools:text="4/17 8:30 PM"/>
 
         <LinearLayout
@@ -42,7 +46,7 @@
                 style="@style/TitleText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@{event.title}"
+                android:text="@{data.title}"
                 android:maxLines="3"
                 android:ellipsize="end"
                 tools:text="Giants vs Dodgers"/>
@@ -51,7 +55,7 @@
                 style="@style/SubtitleText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@{event.venue.displayLocation}"
+                android:text="@{data.subtitle}"
                 tools:text="San Francisco, CA"/>
 
             <TextView
@@ -59,8 +63,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="1"
-                android:visibility="@{event.stats.listingCount == 0 ? View.GONE : View.VISIBLE}"
-                android:text="@{@string/x_listings_from_y_dollars(event.stats.listingCount, event.stats.lowestPrice)}"
+                android:text="@{data.body}"
                 android:gravity="bottom"
                 tools:text="50 listings from $7"/>
 

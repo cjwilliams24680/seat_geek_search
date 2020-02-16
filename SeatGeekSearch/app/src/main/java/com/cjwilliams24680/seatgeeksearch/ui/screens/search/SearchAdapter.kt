@@ -4,7 +4,7 @@ import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import com.cjwilliams24680.seatgeeksearch.databinding.SearchEventItemViewBinding
-import com.cjwilliams24680.seatgeeksearch.models.Event
+import com.cjwilliams24680.seatgeeksearch.network.models.Event
 import com.cjwilliams24680.seatgeeksearch.ui.common.ListItemCallback
 import java.lang.ref.WeakReference
 import java.util.*
@@ -16,7 +16,7 @@ import java.util.*
 class SearchAdapter(eventItemCallback: ListItemCallback<Event>) : RecyclerView.Adapter<SearchEventItemView>(), ListItemCallback<Event> {
 
     private var callback: WeakReference<ListItemCallback<Event>> = WeakReference(eventItemCallback)
-    var events: List<Event> = Collections.emptyList()
+    var events: List<SearchResultUIModel> = Collections.emptyList()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SearchEventItemView {
         return SearchEventItemView(SearchEventItemViewBinding.inflate(LayoutInflater.from(parent.context), parent, false), callback.get()!!)

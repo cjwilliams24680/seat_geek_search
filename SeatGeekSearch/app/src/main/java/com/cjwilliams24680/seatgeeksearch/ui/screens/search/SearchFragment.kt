@@ -3,21 +3,15 @@ package com.cjwilliams24680.seatgeeksearch.ui.screens.search
 import android.os.Bundle
 import com.google.android.material.snackbar.Snackbar
 import androidx.appcompat.widget.SearchView
-import android.util.Log
 import android.view.*
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
-import com.cjwilliams24680.seatgeeksearch.BuildConfig
 import com.cjwilliams24680.seatgeeksearch.R
-import com.cjwilliams24680.seatgeeksearch.data.UserPreferences
 import com.cjwilliams24680.seatgeeksearch.databinding.SearchFragmentBinding
 import com.cjwilliams24680.seatgeeksearch.di.DaggerManager
-import com.cjwilliams24680.seatgeeksearch.models.CloudUtils
-import com.cjwilliams24680.seatgeeksearch.models.Event
-import com.cjwilliams24680.seatgeeksearch.network.SeatGeekApi
-import com.cjwilliams24680.seatgeeksearch.repositories.EventRepository
+import com.cjwilliams24680.seatgeeksearch.network.models.Event
 import com.cjwilliams24680.seatgeeksearch.ui.common.BaseFragment
-import com.cjwilliams24680.seatgeeksearch.ui.common.BaseFragmentCallback
 import com.cjwilliams24680.seatgeeksearch.ui.common.ListItemCallback
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.processors.PublishProcessor
@@ -32,18 +26,11 @@ import javax.inject.Inject
 
 class SearchFragment : BaseFragment(), ListItemCallback<Event> , SearchView.OnQueryTextListener{
 
-    companion object {
-        val TAG = "SearchFragment"
-    }
-
-    interface Callback : BaseFragmentCallback {
+    interface Callback {
         fun onSearchItemSelected(event: Event)
     }
 
     @Inject lateinit var viewModelFactory: ViewModelProvider.Factory
-
-    @Inject lateinit var eventRepository: EventRepository
-    @Inject lateinit var userPreferences: UserPreferences
 
     private lateinit var searchViewModel: SearchViewModel
 
@@ -52,7 +39,6 @@ class SearchFragment : BaseFragment(), ListItemCallback<Event> , SearchView.OnQu
     private var callback: WeakReference<Callback>? = null
 
     private val textChangeBuffer: PublishProcessor<String> = PublishProcessor.create()
-    private var lastQuery = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -67,10 +53,32 @@ class SearchFragment : BaseFragment(), ListItemCallback<Event> , SearchView.OnQu
         return binding.root
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        showLoadingSpinner(true)
-        searchEvents(userPreferences.getLastQuery())
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        searchViewModel.search()
+
+        searchViewModel.error.observe(viewLifecycleOwner, Observer {
+            it.pop()?.let {
+                showError()
+            }
+        })
+
+        searchViewModel.events.observe(viewLifecycleOwner, Observer { events ->
+            adapter.events = events
+            adapter.notifyDataSetChanged()
+        })
+
+        searchViewModel.isLoading.observe(viewLifecycleOwner, Observer {
+            showLoadingSpinner(it)
+        })
+
+        searchViewModel.showEmptyState.observe(viewLifecycleOwner, Observer {
+            // todo
+        })
+    }
+
+    private fun showError() {
+        Snackbar.make(binding.root, R.string.an_error_occurred, Snackbar.LENGTH_SHORT).show()
     }
 
     override fun onCreateOptionsMenu(menu: Menu, menuInflater: MenuInflater) {
@@ -90,40 +98,13 @@ class SearchFragment : BaseFragment(), ListItemCallback<Event> , SearchView.OnQu
                         .debounce(300, TimeUnit.MILLISECONDS)
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(
-                                this::searchEvents,
-                                {error -> Log.e(TAG, "An error occurred while processing search text", error)}))
-    }
-
-    override fun onStop() {
-        super.onStop()
-        userPreferences.setLastQuery(lastQuery)
+                                { query -> searchViewModel.search(query) },
+                                { showError() }
+                        ))
     }
 
     fun setCallback(callback: Callback) {
         this.callback = WeakReference(callback)
-    }
-
-    private fun searchEvents(searchQuery: String) {
-        if (searchQuery.isBlank() && searchQuery == lastQuery) {
-            showLoadingSpinner(false)
-            return
-        }
-
-        disposables.add(
-                eventRepository.getActiveEventsRx(searchQuery)
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(
-                                {events ->
-                                    lastQuery = searchQuery
-                                    adapter.events = events
-                                    adapter.notifyDataSetChanged()
-                                    showLoadingSpinner(false)
-                                },
-                                {error ->
-                                    Log.e(TAG, "There was an error while loading search results", error)
-                                    showLoadingSpinner(false)
-                                    callback!!.get()!!.showSnackbar(R.string.an_error_occurred, Snackbar.LENGTH_SHORT)
-                                }))
     }
 
     private fun showLoadingSpinner(isVisible: Boolean) {
@@ -136,6 +117,7 @@ class SearchFragment : BaseFragment(), ListItemCallback<Event> , SearchView.OnQu
     }
 
     override fun onItemSelected(item: Event) {
+        // todo can use navigation component instead of doing this
         callback!!.get()!!.onSearchItemSelected(item)
     }
 
@@ -143,14 +125,12 @@ class SearchFragment : BaseFragment(), ListItemCallback<Event> , SearchView.OnQu
         // takes focus away from search bar
         // i believe this should close the keyboard and remove the cursor but i'll need to test
         binding.eventsList.requestFocus()
-        showLoadingSpinner(true)
         hideKeyboard()
         textChangeBuffer.onNext(query ?: "")
         return true
     }
 
     override fun onQueryTextChange(newText: String?): Boolean {
-        showLoadingSpinner(false)
         textChangeBuffer.onNext(newText ?: "")
         return true
     }
