@@ -1,20 +1,12 @@
 package com.cjwilliams24680.seatgeeksearch.network;
 
-import android.util.Log;
-
 import com.cjwilliams24680.seatgeeksearch.BuildConfig;
 import com.google.gson.Gson;
 
-import java.net.SocketTimeoutException;
-import java.util.concurrent.TimeUnit;
-
 import javax.inject.Inject;
 import javax.inject.Singleton;
-
-import io.reactivex.schedulers.Schedulers;
 import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.Response;
+import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
@@ -24,11 +16,6 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 @Singleton
 public class NetworkManager {
-
-    private static final String TAG = SeatGeekApi.class.getSimpleName();
-
-    private static int DEFAULT_MAX_RETRIES = 1;
-    private static int DEFAULT_TIMEOUT_IN_SECONDS = 5;
 
     private OkHttpClient client;
     private SeatGeekApi seatGeekApi;
@@ -51,39 +38,17 @@ public class NetworkManager {
         return seatGeekApi;
     }
 
-    public OkHttpClient getClient() {
+    private OkHttpClient getClient() {
         if (client == null) {
-            client = new OkHttpClient().newBuilder()
-                    .addInterceptor(chain -> {
-                        Request request = chain.request();
+            OkHttpClient.Builder builder = new OkHttpClient().newBuilder();
 
-                        int numTries = 0;
-                        Response response = null;
-                        boolean isTimeOutError = false;
+            if (BuildConfig.DEBUG) {
+                HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
+                logging.setLevel(HttpLoggingInterceptor.Level.BASIC);
+                builder.addInterceptor(logging);
+            }
 
-                        while (numTries == 0 || (isTimeOutError && numTries <= DEFAULT_MAX_RETRIES)) {
-                            ++numTries;
-                            try {
-                                response = chain.withReadTimeout(DEFAULT_TIMEOUT_IN_SECONDS, TimeUnit.SECONDS).proceed(request);
-                                final int code = response.code();
-                                isTimeOutError = code == 502 || code == 503 || code == 504;
-                            } catch (SocketTimeoutException exception) {
-                                isTimeOutError = true;
-                            }
-
-                            if (BuildConfig.DEBUG) {
-                                String log = String.format("Network request:%s %s\nresult: %s\nattempt: %d", request.method(), request.url(), response.toString(), numTries);
-                                if (response.isSuccessful()) {
-                                    Log.d(TAG, log);
-                                } else {
-                                    Log.e(TAG, log);
-                                }
-                            }
-                        }
-
-                        return response;
-                    })
-                    .build();
+            client = builder.build();
         }
 
         return client;

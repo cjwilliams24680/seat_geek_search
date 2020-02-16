@@ -45,6 +45,7 @@ class SearchFragment : BaseFragment(), ListItemCallback<Event> , SearchView.OnQu
         setHasOptionsMenu(true)
         DaggerManager.getApplicationComponent().inject(this)
         searchViewModel = ViewModelProviders.of(this, viewModelFactory)[SearchViewModel::class.java]
+        searchViewModel.search()
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
@@ -55,7 +56,6 @@ class SearchFragment : BaseFragment(), ListItemCallback<Event> , SearchView.OnQu
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        searchViewModel.search()
 
         searchViewModel.error.observe(viewLifecycleOwner, Observer {
             it.pop()?.let {
@@ -73,7 +73,11 @@ class SearchFragment : BaseFragment(), ListItemCallback<Event> , SearchView.OnQu
         })
 
         searchViewModel.showEmptyState.observe(viewLifecycleOwner, Observer {
-            // todo
+            // todo add an empty state for if no results are found
+        })
+
+        searchViewModel.showWelcomeState.observe(viewLifecycleOwner, Observer {
+            // todo add a little welcome page for when user first launches
         })
     }
 

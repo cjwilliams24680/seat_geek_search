@@ -6,6 +6,8 @@ import java.util.HashSet
 
 /**
  * Created by chris on 4/19/18.
+ *
+ * todo would be fun to convert this stuff to room instead
  */
 class UserPreferences(context: Context) {
 

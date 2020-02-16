@@ -49,7 +49,7 @@ class SearchDetailFragment : BaseFragment() {
         super.onCreate(savedInstanceState)
         DaggerManager.getApplicationComponent().inject(this)
         searchDetailViewModel = ViewModelProviders.of(this, viewModelFactory)[SearchDetailViewModel::class.java]
-
+        searchDetailViewModel.init(arguments!!.getParcelable(EVENT_KEY)!!)
         setHasOptionsMenu(true)
     }
 
@@ -57,7 +57,6 @@ class SearchDetailFragment : BaseFragment() {
         binding = SearchDetailFragmentBinding.inflate(inflater, container, false)
         binding.vm = searchDetailViewModel
         binding.lifecycleOwner = this
-        searchDetailViewModel.init(arguments!!.getParcelable(EVENT_KEY)!!)
 
         return binding.root
     }

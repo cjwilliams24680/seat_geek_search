@@ -39,6 +39,10 @@ class SearchViewModel @Inject constructor(
     val showEmptyState: LiveData<Boolean>
         get() = _showEmptyState
 
+    private val _showWelcomeState = MutableLiveData<Boolean>(true)
+    val showWelcomeState: LiveData<Boolean>
+        get() = _showWelcomeState
+
     fun search(query: String = lastQuery) {
         if (query != lastQuery) {
             lastQuery = query
