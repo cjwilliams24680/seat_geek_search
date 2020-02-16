@@ -11,7 +11,7 @@ object CloudUtils {
     fun filterExpiredEvents(events: List<Event>?): Single<List<Event>> {
         return Flowable.fromIterable(events)
                 .subscribeOn(Schedulers.io())
-                .filter { obj: Event -> obj.isVisible() }
+                .filter { obj: Event -> obj.isVisible }
                 .toList()
     }
 }

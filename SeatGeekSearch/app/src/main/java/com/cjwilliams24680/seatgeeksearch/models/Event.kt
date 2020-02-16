@@ -58,12 +58,4 @@ data class Event(
 
         @SerializedName("type")
         val type: String
-    ) : Parcelable {
-
-    fun isVisible() = ZonedDateTime.now().isBefore(visibleUntilUtc)
-
-    fun getShortDateTime(): String = DateTimeFormatter.ofPattern("MM/dd hh:mm a").format(dateTimeLocal)
-
-    fun getLongDateTime(): String = DateTimeFormatter.ofPattern("EEE MMM dd, yyyy hh:mm a").format(dateTimeLocal)
-
-}
+    ) : Parcelable
