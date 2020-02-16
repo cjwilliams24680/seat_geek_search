@@ -1,6 +1,7 @@
 package com.cjwilliams24680.seatgeeksearch.di;
 
 import android.app.Application;
+import android.content.Context;
 
 import com.cjwilliams24680.seatgeeksearch.data.UserPreferences;
 import com.cjwilliams24680.seatgeeksearch.network.NetworkManager;
@@ -27,6 +28,11 @@ public class ApplicationModule {
 
     public ApplicationModule(Application application) {
         this.application = application;
+    }
+
+    @Provides
+    Context providesContext() {
+        return application;
     }
 
     @Provides

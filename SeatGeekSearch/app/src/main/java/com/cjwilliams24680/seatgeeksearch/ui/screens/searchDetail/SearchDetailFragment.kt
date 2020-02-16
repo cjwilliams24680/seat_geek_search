@@ -7,13 +7,11 @@ import com.bumptech.glide.request.target.Target
 import com.cjwilliams24680.seatgeeksearch.databinding.SearchDetailFragmentBinding
 import com.cjwilliams24680.seatgeeksearch.network.models.Event
 import com.cjwilliams24680.seatgeeksearch.ui.common.BaseFragment
-import com.cjwilliams24680.seatgeeksearch.ui.common.BaseFragmentCallback
-import com.cjwilliams24680.seatgeeksearch.ui.screens.search.SearchFragment
-import java.lang.ref.WeakReference
 import android.content.Intent
 import android.net.Uri
 import androidx.core.content.res.ResourcesCompat
 import android.view.*
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import com.cjwilliams24680.seatgeeksearch.R
@@ -26,7 +24,7 @@ import javax.inject.Inject
  * Created by chris on 4/15/18.
  */
 
-class SearchDetailFragment : BaseFragment(), SearchDetailBindingListener {
+class SearchDetailFragment : BaseFragment() {
 
     companion object {
         private val EVENT_KEY = "SearchDetailFragment.EVENT_KEY"
@@ -45,61 +43,68 @@ class SearchDetailFragment : BaseFragment(), SearchDetailBindingListener {
 
     private lateinit var searchDetailViewModel: SearchDetailViewModel
     private lateinit var binding: SearchDetailFragmentBinding
-    private var callback: WeakReference<BaseFragmentCallback>? = null
-    private lateinit var event: Event
-    private lateinit var favoriteIcon: MenuItem
+    private var favoriteIcon: MenuItem? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        event = arguments!!.getParcelable(EVENT_KEY)!!
         DaggerManager.getApplicationComponent().inject(this)
         searchDetailViewModel = ViewModelProviders.of(this, viewModelFactory)[SearchDetailViewModel::class.java]
-        setHasOptionsMenu(true)
 
+        setHasOptionsMenu(true)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         binding = SearchDetailFragmentBinding.inflate(inflater, container, false)
-        binding.event = event
-        binding.listener = this
-
-        // Keep original size so that it we don't need to reload when coming from search
-        // Also dont use transition or thumbnail, since it's already loaded
-        Glide.with(binding.root)
-                .load(event.performerList[0].image)
-                .apply(RequestOptions.overrideOf(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL))
-                .into(binding.headerImage)
+        binding.vm = searchDetailViewModel
+        binding.lifecycleOwner = this
+        searchDetailViewModel.init(arguments!!.getParcelable(EVENT_KEY)!!)
 
         return binding.root
+    }
+
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+
+        searchDetailViewModel.data.observe(viewLifecycleOwner, Observer { uiModel ->
+            // Keep original size so that it we don't need to reload when coming from search
+            // Also dont use transition or thumbnail, since it's already loaded
+            Glide.with(binding.root)
+                    .load(uiModel.imageUrl)
+                    .apply(RequestOptions.overrideOf(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL))
+                    .into(binding.headerImage)
+        })
+
+        searchDetailViewModel.isFavorited.observe(viewLifecycleOwner, Observer {
+            updateFavoriteIcon(it)
+        })
+
+        searchDetailViewModel.launchUrl.observe(viewLifecycleOwner, Observer {
+            it.pop()?.run { onViewSeatGeek(this) }
+        })
     }
 
     override fun onCreateOptionsMenu(menu: Menu, menuInflater: MenuInflater) {
         menuInflater.inflate(R.menu.search_detail_menu, menu)
         favoriteIcon = menu.findItem(R.id.action_favorite)!!
-        updateFavoriteIcon()
+        searchDetailViewModel.isFavorited.value?.let { updateFavoriteIcon(it) }
     }
 
-    private fun updateFavoriteIcon() {
-        val icon = if (userPreferences.isFavorite(event.id)) R.drawable.ic_favorite_white_24dp else R.drawable.ic_favorite_border_white_24dp
-        favoriteIcon.icon = ResourcesCompat.getDrawable(resources, icon, null)
+    private fun updateFavoriteIcon(isFavorite: Boolean) {
+        val icon = if (isFavorite) R.drawable.ic_favorite_white_24dp else R.drawable.ic_favorite_border_white_24dp
+        favoriteIcon?.icon = ResourcesCompat.getDrawable(resources, icon, null)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if (item.itemId == R.id.action_favorite) {
-            userPreferences.toggleFavorite(event.id)
-            updateFavoriteIcon()
+            searchDetailViewModel.onFavoriteToggled()
             return true
         }
 
         return super.onOptionsItemSelected(item)
     }
 
-    fun setCallback(callback: SearchFragment.Callback) {
-        this.callback = WeakReference(callback)
-    }
-
-    override fun onViewSeatGeek(view: View) {
-        val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse(event.url))
+    private fun onViewSeatGeek(url: String) {
+        val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
         startActivity(browserIntent)
     }
 

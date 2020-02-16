@@ -5,6 +5,7 @@ import android.util.Log;
 import com.cjwilliams24680.seatgeeksearch.BuildConfig;
 import com.google.gson.Gson;
 
+import java.net.SocketTimeoutException;
 import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
@@ -15,7 +16,6 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 import retrofit2.Retrofit;
-import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 /**
@@ -44,8 +44,6 @@ public class NetworkManager {
                             .baseUrl("https://api.seatgeek.com/2/")
                             .client(getClient())
                             .addConverterFactory(GsonConverterFactory.create(new Gson()))
-                            .addCallAdapterFactory(
-                                    RxJava2CallAdapterFactory.createWithScheduler(Schedulers.io()))
                             .build()
                             .create(SeatGeekApi.class);
         }
@@ -65,9 +63,13 @@ public class NetworkManager {
 
                         while (numTries == 0 || (isTimeOutError && numTries <= DEFAULT_MAX_RETRIES)) {
                             ++numTries;
-                            response = chain.withReadTimeout(DEFAULT_TIMEOUT_IN_SECONDS, TimeUnit.SECONDS).proceed(request);
-                            final int code = response.code();
-                            isTimeOutError = code == 502 || code == 503 || code == 504;
+                            try {
+                                response = chain.withReadTimeout(DEFAULT_TIMEOUT_IN_SECONDS, TimeUnit.SECONDS).proceed(request);
+                                final int code = response.code();
+                                isTimeOutError = code == 502 || code == 503 || code == 504;
+                            } catch (SocketTimeoutException exception) {
+                                isTimeOutError = true;
+                            }
 
                             if (BuildConfig.DEBUG) {
                                 String log = String.format("Network request:%s %s\nresult: %s\nattempt: %d", request.method(), request.url(), response.toString(), numTries);

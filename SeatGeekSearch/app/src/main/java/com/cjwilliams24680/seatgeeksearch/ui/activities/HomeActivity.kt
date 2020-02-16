@@ -32,7 +32,6 @@ class HomeActivity : AppCompatActivity(), SearchFragment.Callback, FragmentManag
 
     override fun onSearchItemSelected(event: Event) {
         val searchDetailFragment = SearchDetailFragment.create(event)
-        searchDetailFragment.setCallback(this)
 
         supportFragmentManager.beginTransaction()
                 .replace(R.id.container, searchDetailFragment)

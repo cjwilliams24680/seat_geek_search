@@ -4,8 +4,7 @@
         xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
-        <variable name="listener" type="com.cjwilliams24680.seatgeeksearch.ui.screens.searchDetail.SearchDetailBindingListener"/>
-        <variable name="event" type="com.cjwilliams24680.seatgeeksearch.network.models.Event"/>
+        <variable name="vm" type="com.cjwilliams24680.seatgeeksearch.ui.screens.searchDetail.SearchDetailViewModel"/>
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -46,21 +45,21 @@
                 style="@style/TitleText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@{event.title}"
+                android:text="@{vm.data.title}"
                 tools:text="San Francisco Giants vs Los Angeles Dodgers"/>
 
             <TextView
                 style="@style/SubtitleText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@{@string/x_in_y(event.venue.name, event.venue.displayLocation)}"
+                android:text="@{vm.data.location}"
                 tools:text="ATT Park in San Francisco, CA"/>
 
             <TextView
                 style="@style/SubtitleText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@{event.getLongDateTime()}"
+                android:text="@{vm.data.date}"
                 tools:text="Wed May 02, 2018 7:00PM"/>
 
             <Button
@@ -69,7 +68,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:text="@string/view_on_seatgeek"
-                android:onClick="@{listener::onViewSeatGeek}"/>
+                android:onClick="@{() -> vm.onLaunchClicked()}"/>
 
         </LinearLayout>
 

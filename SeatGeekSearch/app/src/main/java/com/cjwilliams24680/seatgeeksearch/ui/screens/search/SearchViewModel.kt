@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.cjwilliams24680.seatgeeksearch.R
 import com.cjwilliams24680.seatgeeksearch.data.UserPreferences
+import com.cjwilliams24680.seatgeeksearch.network.models.isVisible
 import com.cjwilliams24680.seatgeeksearch.network.models.shortDateTime
 import com.cjwilliams24680.seatgeeksearch.repositories.EventRepository
 import com.cjwilliams24680.seatgeeksearch.repositories.ResourceRepository
@@ -51,20 +52,22 @@ class SearchViewModel @Inject constructor(
                 _error.postValue(LiveDataEvent(Throwable(resourceRepository.getString(R.string.an_error_occurred))))
                 _isLoading.postValue(false)
             } else {
-                val uiModels = response.body()?.events.orEmpty().map { event ->
-                    val priceText = if (event.stats.listingCount > 0) {
-                        resourceRepository.getString(R.string.x_listings_from_y_dollars, event.stats.listingCount, event.stats.lowestPrice)
-                    } else ""
+                val uiModels = response.body()?.events.orEmpty()
+                        .filter { it.isVisible }
+                        .map { event ->
+                            val priceText = if (event.stats.listingCount > 0) {
+                                resourceRepository.getString(R.string.x_listings_from_y_dollars, event.stats.listingCount, event.stats.lowestPrice)
+                            } else ""
 
-                    SearchResultUIModel(
-                            event.title,
-                            event.venue.displayLocation,
-                            priceText,
-                            event.shortDateTime,
-                            event.performerList.firstOrNull()?.image,
-                            event
-                    )
-                }
+                            SearchResultUIModel(
+                                    event.title,
+                                    event.venue.displayLocation,
+                                    priceText,
+                                    event.shortDateTime,
+                                    event.performerList.firstOrNull()?.image,
+                                    event
+                            )
+                        }
 
                 _events.postValue(uiModels)
                 _isLoading.postValue(false)
