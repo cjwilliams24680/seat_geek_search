@@ -1,4 +1,4 @@
-package com.cjwilliams24680.seatgeeksearch.dagger;
+package com.cjwilliams24680.seatgeeksearch.di;
 
 import android.app.Application;
 
@@ -10,6 +10,7 @@ import java.lang.ref.WeakReference;
 
 import javax.inject.Singleton;
 
+import androidx.lifecycle.ViewModelProvider;
 import dagger.Module;
 import dagger.Provides;
 
@@ -22,10 +23,10 @@ import dagger.Provides;
 @Module
 public class ApplicationModule {
 
-    private final WeakReference<Application> application;
+    private final Application application;
 
     public ApplicationModule(Application application) {
-        this.application = new WeakReference<>(application);
+        this.application = application;
     }
 
     @Provides
@@ -35,7 +36,7 @@ public class ApplicationModule {
 
     @Provides @Singleton
     UserPreferences providesUserPreferences() {
-        return new UserPreferences(application.get());
+        return new UserPreferences(application);
     }
 
 }

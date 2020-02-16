@@ -7,9 +7,9 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.FragmentManager
 import com.google.android.material.snackbar.Snackbar
 import com.cjwilliams24680.seatgeeksearch.R
-import com.cjwilliams24680.seatgeeksearch.dagger.ActivityComponent
-import com.cjwilliams24680.seatgeeksearch.dagger.ActivityModule
-import com.cjwilliams24680.seatgeeksearch.dagger.DaggerManager
+import com.cjwilliams24680.seatgeeksearch.di.ActivityComponent
+import com.cjwilliams24680.seatgeeksearch.di.ActivityModule
+import com.cjwilliams24680.seatgeeksearch.di.DaggerManager
 import com.cjwilliams24680.seatgeeksearch.databinding.HomeActivityBinding
 import com.cjwilliams24680.seatgeeksearch.models.Event
 import com.cjwilliams24680.seatgeeksearch.ui.screens.searchDetail.SearchDetailFragment

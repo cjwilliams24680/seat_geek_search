@@ -5,10 +5,13 @@ import com.google.android.material.snackbar.Snackbar
 import androidx.appcompat.widget.SearchView
 import android.util.Log
 import android.view.*
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelProviders
 import com.cjwilliams24680.seatgeeksearch.BuildConfig
 import com.cjwilliams24680.seatgeeksearch.R
 import com.cjwilliams24680.seatgeeksearch.data.UserPreferences
 import com.cjwilliams24680.seatgeeksearch.databinding.SearchFragmentBinding
+import com.cjwilliams24680.seatgeeksearch.di.DaggerManager
 import com.cjwilliams24680.seatgeeksearch.models.CloudUtils
 import com.cjwilliams24680.seatgeeksearch.models.Event
 import com.cjwilliams24680.seatgeeksearch.network.SeatGeekApi
@@ -37,8 +40,12 @@ class SearchFragment : BaseFragment(), ListItemCallback<Event> , SearchView.OnQu
         fun onSearchItemSelected(event: Event)
     }
 
+    @Inject lateinit var viewModelFactory: ViewModelProvider.Factory
+
     @Inject lateinit var seatGeekApi: SeatGeekApi
     @Inject lateinit var userPreferences: UserPreferences
+
+    private lateinit var searchViewModel: SearchViewModel
 
     private lateinit var binding: SearchFragmentBinding
     private val adapter: SearchAdapter = SearchAdapter(this)
@@ -50,7 +57,8 @@ class SearchFragment : BaseFragment(), ListItemCallback<Event> , SearchView.OnQu
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
-        callback!!.get()!!.getActivityComponent().inject(this)
+        DaggerManager.getApplicationComponent().inject(this)
+        searchViewModel = ViewModelProviders.of(this, viewModelFactory)[SearchViewModel::class.java]
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {

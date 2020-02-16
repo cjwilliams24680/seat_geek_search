@@ -1,4 +1,4 @@
-package com.cjwilliams24680.seatgeeksearch.dagger;
+package com.cjwilliams24680.seatgeeksearch.di;
 
 import android.app.Application;
 

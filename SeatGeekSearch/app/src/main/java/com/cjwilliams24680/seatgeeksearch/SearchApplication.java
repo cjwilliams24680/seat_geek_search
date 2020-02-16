@@ -2,7 +2,7 @@ package com.cjwilliams24680.seatgeeksearch;
 
 import android.app.Application;
 
-import com.cjwilliams24680.seatgeeksearch.dagger.DaggerManager;
+import com.cjwilliams24680.seatgeeksearch.di.DaggerManager;
 import com.jakewharton.threetenabp.AndroidThreeTen;
 
 import io.reactivex.plugins.RxJavaPlugins;

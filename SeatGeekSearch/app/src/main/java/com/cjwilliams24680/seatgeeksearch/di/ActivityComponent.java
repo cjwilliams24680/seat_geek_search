@@ -1,4 +1,4 @@
-package com.cjwilliams24680.seatgeeksearch.dagger;
+package com.cjwilliams24680.seatgeeksearch.di;
 
 import com.cjwilliams24680.seatgeeksearch.ui.screens.searchDetail.SearchDetailFragment;
 import com.cjwilliams24680.seatgeeksearch.ui.screens.search.SearchFragment;
@@ -15,6 +15,5 @@ import dagger.Subcomponent;
         }
 )
 public interface ActivityComponent {
-        void inject(SearchFragment fragment);
-        void inject(SearchDetailFragment fragment);
+        // unused right now
 }

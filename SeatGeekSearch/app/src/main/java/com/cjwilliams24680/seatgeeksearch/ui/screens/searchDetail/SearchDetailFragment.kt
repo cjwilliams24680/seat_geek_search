@@ -14,8 +14,11 @@ import android.content.Intent
 import android.net.Uri
 import androidx.core.content.res.ResourcesCompat
 import android.view.*
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelProviders
 import com.cjwilliams24680.seatgeeksearch.R
 import com.cjwilliams24680.seatgeeksearch.data.UserPreferences
+import com.cjwilliams24680.seatgeeksearch.di.DaggerManager
 import javax.inject.Inject
 
 
@@ -37,8 +40,10 @@ class SearchDetailFragment : BaseFragment(), SearchDetailBindingListener {
         }
     }
 
+    @Inject lateinit var viewModelFactory: ViewModelProvider.Factory
     @Inject lateinit var userPreferences: UserPreferences
 
+    private lateinit var searchDetailViewModel: SearchDetailViewModel
     private lateinit var binding: SearchDetailFragmentBinding
     private var callback: WeakReference<BaseFragmentCallback>? = null
     private lateinit var event: Event
@@ -47,7 +52,8 @@ class SearchDetailFragment : BaseFragment(), SearchDetailBindingListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         event = arguments!!.getParcelable(EVENT_KEY)!!
-        callback!!.get()!!.getActivityComponent().inject(this)
+        DaggerManager.getApplicationComponent().inject(this)
+        searchDetailViewModel = ViewModelProviders.of(this, viewModelFactory)[SearchDetailViewModel::class.java]
         setHasOptionsMenu(true)
 
     }
